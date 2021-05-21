@@ -19,7 +19,8 @@ const campgroundRoutes = require("./routes/campgrounds")
 const reviewRoutes = require("./routes/reviews")
 const User = require("./models/user")
 const mongoSanitize = require("express-mongo-sanitize")
-const dbUrl = process.env.DB_URL
+const dbUrl = process.env.DB_URL || "mongodb://localhost:27017/yelp-camp" 
+const secret = process.env.SECRET || "thisshouldbeabettersecret"
 const MongoStore = require("connect-mongo")
 
 mongoose.connect(dbUrl, {useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true, useFindAndModify: false})
@@ -40,7 +41,7 @@ app.use(mongoSanitize())
 
 const store = MongoStore.create({
 	mongoUrl: dbUrl,
-	secret: "thisshouldbeabettersecret",
+	secret,
 	ttl: 24 * 60 * 60,
 })
 
@@ -51,7 +52,7 @@ store.on("error", function(err) {
 const sessionConfig = {
 	store,
 	name: "session",
-	secret: "thisshouldbeabettersecret",
+	secret,
 	resave: false,
 	saveUninitialized: true,
 	cookie: {
@@ -100,6 +101,7 @@ app.use((err, req, res, next) => {
 	res.status(err.statusCode).render("error", {err})
 })
 
+const port = process.env.PORT || 8080
 app.listen(8080, () => {
-	console.log("Listening on Port 8080")
+	console.log(`Listening on Port ${port}`)
 })
