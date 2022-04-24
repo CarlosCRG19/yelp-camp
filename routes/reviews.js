@@ -9,4 +9,4 @@ const {isLoggedIn, isReviewAuthor, validateReview} = require("../middleware")
 router.post("/", isLoggedIn, validateReview, catchAsync(review.createReview))
 router.delete("/:reviewId", isLoggedIn, isReviewAuthor, catchAsync(review.deleteCampground))
 
-module.exports = router // exportando el router
+module.exports = router

@@ -61,6 +61,7 @@ const sessionConfig = {
 		httpOnly: true
 	}
 }
+
 app.use(session(sessionConfig))
 app.use(flash())
 
@@ -86,12 +87,6 @@ app.use("/campgrounds/:id/reviews", reviewRoutes)
 app.get("/", (req, res) => {
 	res.render("home")
 })
-
-// app.get("/makecampground", async (req, res) => {
-// 	const camp = new Campground({title: "My Backyard", description: "cheap camping"})
-// 	await camp.save() 
-// 	res.send(camp)
-// })
 
 app.all("*", (req, res, next) => {next(new ExpressError("Page Not Found", 404))})
 
